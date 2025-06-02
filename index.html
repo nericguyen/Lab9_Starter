@@ -69,25 +69,40 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button id="logButton">Console Log</button>
+      <button id="errorButton">Console Error</button>
+      <button id="countButton">Console Count</button>
+      <button id="warnButton">Console Warn</button>
+      <button id="assertButton">Console Assert</button>
+      <button id="clearButton">Console Clear</button>
+      <button id="dirButton">Console Dir</button>
+      <button id="dirxmlButton">Console dirxml</button>
+      <button id="grpStartButton">Console Group Start</button>
+      <button id="grpEndButton">Console Group End</button>
+      <button id="tableButton">Console Table</button>
+      <button id="startTimerButton">Start Timer</button>
+      <button id="endTimerButton">End Timer</button>
+      <button id="traceButton">Console Trace</button>
+      <button id="globalErrButton">Trigger a Global Error</button>
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+  window.TrackJS && TrackJS.install({ 
+    token: "9f6682bf89314756b2ec01dbe6c8e3b6"
+    // for more configuration options, see https://docs.trackjs.com
+  });
+  </script>
+
+  <script>
+    class mathError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "mathError";
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,13 +110,129 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try {
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      }
+      catch(error) {
+        console.error("Bad inputs.");
+        throw new mathError("bad inputs lolzlolzlolz");
+      }
+      finally {
+        console.log("Thanks for using my calculator :)");
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    /**
+     * Defining Console Buttons
+     */
+    let logButton = document.getElementById("logButton");
+    let errorButton = document.getElementById("errorButton");
+    let countButton = document.getElementById("countButton");
+    let warnButton = document.getElementById("warnButton");
+    let assertButton = document.getElementById("assertButton");
+    let clearButton = document.getElementById("clearButton");
+    let dirButton = document.getElementById("dirButton");
+    let dirxmlButton = document.getElementById("dirxmlButton");
+    let grpStartButton = document.getElementById("grpStartButton");
+    let grpEndButton = document.getElementById("grpEndButton");
+    let tableButton = document.getElementById("tableButton");
+    let startTimerButton = document.getElementById("startTimerButton");
+    let endTimerButton = document.getElementById("endTimerButton");
+    let traceButton = document.getElementById("traceButton");
+    let globalErrButton = document.getElementById("globalErrButton");
+
+    /**
+     * Defining Variables
+     */
+    let count = 0;
+  
+    // console.log
+    logButton.addEventListener('click', () => {
+      console.log("Console Log Demo");
+    });
+
+    // console.error
+    errorButton.addEventListener('click', () => {
+      console.error("Console Error Demo");
+    });
+
+    // console count
+    countButton.addEventListener('click', () => {
+      count++;
+      console.log("Count Button: " + count);
+    });
+
+    // console.warn
+    warnButton.addEventListener('click', () => {
+      console.warn("Console Warn Button");
+    });
+
+    // console.assert
+    let errorMessage = "This magic number is not even buddy";
+    let errorNumberTest = 3;
+    assertButton.addEventListener('click', () => {
+      console.assert(errorNumberTest % 2 === 0, "%o", { errorNumberTest, errorMessage });
+    });
+
+    // console.clear
+    clearButton.addEventListener('click', () => {
+      console.clear();
+    });
+
+    // console.dir
+    dirButton.addEventListener('click', () => {
+      console.dir(dirButton);
+    });
+
+    // console.dirxml
+    dirxmlButton.addEventListener('click', () => {
+      console.dirxml(dirxmlButton);
+    });
+
+    // console.group
+    grpStartButton.addEventListener('click', () => {
+      console.group();
+    });
+
+    // console.groupEnd
+    grpEndButton.addEventListener('click', () => {
+      console.groupEnd();
+    });
+
+    // console.table
+    tableButton.addEventListener('click', () => {
+      console.table(["Hi TAs", "Hi Powell", "Hi everyone"]);
+    });
+
+    // console.time
+    startTimerButton.addEventListener('click', () => {
+      console.time();
+    });
+
+    // console.timeEnd
+    endTimerButton.addEventListener('click', () => {
+      console.timeEnd();
+    });
+
+    // console.trace
+    traceButton.addEventListener('click', () => {
+      console.trace();
+    });
+
+    // window.onerror
+    globalErrButton.addEventListener('click', () => {
+      try {
+        undefinedFunction();
+      } catch (error) {
+        console.log("Global Error");
+      }
+    });
+
   </script>
 </body>
 
